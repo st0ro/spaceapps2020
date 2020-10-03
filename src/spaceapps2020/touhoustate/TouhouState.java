@@ -16,6 +16,7 @@ public class TouhouState extends BasicGameState {
     Spaceship ship;
     List<Laser> laserList = new ArrayList<>();
     List<Debris> debrisList = new ArrayList<>();
+    List<Asteroid> asteroidList = new ArrayList<>();
     @Override
     public int getID() {
         return 2;
@@ -26,6 +27,7 @@ public class TouhouState extends BasicGameState {
         Spaceship.init();
         Laser.init();
         Debris.init();
+        Asteroid.init();
 
         ship = new Spaceship();
         debrisList.add(new Debris(960, 0));
@@ -34,6 +36,10 @@ public class TouhouState extends BasicGameState {
         debrisList.add(new Debris(960, 0));
         debrisList.add(new Debris(960, 0));
         debrisList.add(new Debris(960, 0));
+        asteroidList.add(new Asteroid(960, 0));
+        asteroidList.add(new Asteroid(960, 0));
+        asteroidList.add(new Asteroid(960, 0));
+        asteroidList.add(new Asteroid(960, 0));
     }
 
     @Override
@@ -45,6 +51,9 @@ public class TouhouState extends BasicGameState {
         for(Debris d:debrisList){
             d.render(graphics);
         }
+        for(Asteroid s:asteroidList){
+            s.render(graphics);
+        }
     }
 
     @Override
@@ -52,6 +61,7 @@ public class TouhouState extends BasicGameState {
         ship.update(gameContainer, delta);
         updateAndRemove(gameContainer, delta, laserList);
         updateAndRemove(gameContainer, delta, debrisList);
+        updateAndRemove(gameContainer, delta, asteroidList);
     }
 
     @Override

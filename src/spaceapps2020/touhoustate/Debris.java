@@ -6,8 +6,8 @@ import org.newdawn.slick.geom.Rectangle;
 
 public class Debris extends TouhouObject {
     static Image[] debrisImg = new Image[3];
-    float debrisXMoveSpeed = (float)(Math.random() * 2 - 1) * 0.7f;
-    float debrisYMoveSpeed = (float)Math.random() * 0.7f;
+    float debrisXMoveSpeed = (float)(Math.random() * 2 - 1) * 0.4f;
+    float debrisYMoveSpeed = (float)Math.random() * 0.4f;
     int index;
     static int[] offsetXList = {-5, 2, -22};
     static int[] offsetYList = {0, -35, -15};
