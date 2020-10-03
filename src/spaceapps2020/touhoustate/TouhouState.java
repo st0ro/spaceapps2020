@@ -22,7 +22,10 @@ public class TouhouState extends BasicGameState {
     int debrisCollected;
     int health = 6;
     int invulTimer = 0;
+    List<Health> healthList = new ArrayList<>();
     StarManager starManager = new StarManager();
+
+
     @Override
     public int getID() {
         return 2;
@@ -36,6 +39,10 @@ public class TouhouState extends BasicGameState {
         Asteroid.init();
         DebrisPickup.init();
         BigAsteroid.init();
+        Health.init();
+        for (int i = 0; i < health; i++) {
+            healthList.add(new Health(100, 100 + 100 * i));
+        }
 
         ship = new Spaceship();
         explosionImg = new Image("assets/touhou/explosion.png", false, Image.FILTER_NEAREST);
@@ -60,12 +67,15 @@ public class TouhouState extends BasicGameState {
         for (DebrisPickup dp : debrisPickupList) {
             dp.render(graphics);
         }
+
+        for(Health h : healthList){
+            h.render(graphics);
+        }
+
         ship.render(graphics);
         if (!gameRunning) {
             explosionImg.draw(ship.hitbox.getX() - 20, ship.hitbox.getY() - 20, 7.5f);
         }
-        graphics.drawString("Debris collected: " + debrisCollected, 100, 100);
-        graphics.drawString("Health: " + health, 100, 120);
     }
 
     @Override
@@ -146,6 +156,7 @@ public class TouhouState extends BasicGameState {
     }
 
     public void spawn() {
+
         if (Math.random() < 0.002) {
             debrisList.add(new Debris((float) Math.random() * 1920, 0));
         }
@@ -160,6 +171,8 @@ public class TouhouState extends BasicGameState {
 
     private void damageTaken(int dmg){
         health -= dmg;
+        for(int i = 0 ; i < dmg;i ++)
+            healthList.remove(healthList.size()-1);
         if(health <= 0){
             gameRunning = false;
         }
