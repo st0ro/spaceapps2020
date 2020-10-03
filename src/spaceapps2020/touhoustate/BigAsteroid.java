@@ -4,7 +4,7 @@ import org.newdawn.slick.geom.Rectangle;
 
 public class BigAsteroid extends TouhouObject {
     static Image bigAsteroidImg;
-    float bigAsteroidMoveSpeed = (float) 8f;
+    float bigAsteroidMoveSpeed = (float) 5f;
     int bigAsteroidX = (int)(Math.random() * 1920);
 
     public static void init() throws SlickException{
