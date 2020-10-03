@@ -20,6 +20,7 @@ public class TouhouState extends BasicGameState {
     List<DebrisPickup> debrisPickupList = new ArrayList<>();
     Image explosionImg;
     int debrisCollected;
+    StarManager starManager = new StarManager();
     @Override
     public int getID() {
         return 2;
@@ -58,6 +59,7 @@ public class TouhouState extends BasicGameState {
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
+        starManager.render(graphics);
         ship.render(graphics);
         bigAsteroid.render(graphics);
         for(Laser l:laserList){
@@ -113,6 +115,7 @@ public class TouhouState extends BasicGameState {
                 }
             }
         }
+        starManager.update(delta);
         ship.update(gameContainer, delta);
         bigAsteroid.update(gameContainer, delta);
         updateAndRemove(gameContainer, delta, laserList);
