@@ -176,6 +176,6 @@ public class TouhouState extends BasicGameState {
     }
 
     public void updateBar(float progress){
-        bar.setWidth((int)(630 * progress));
+        bar.setWidth((int)(1820 * progress));
     }
 }
