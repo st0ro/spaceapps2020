@@ -9,6 +9,7 @@ public class NotTouhou extends StateBasedGame {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
     public static SpriteSheetFont pixelFontBlack;
+    public static SpriteSheetFont pixelFontWhite;
 
     public NotTouhou() {
         super("Not Touhou");
@@ -20,6 +21,7 @@ public class NotTouhou extends StateBasedGame {
         addState(new NavState());
         addState(new TouhouState());
         pixelFontBlack = new SpriteSheetFont(new SpriteSheet(new Image("assets/fontblack.png", false, Image.FILTER_NEAREST).getScaledCopy(7f), 35, 35), ' ');
+        pixelFontWhite = new SpriteSheetFont(new SpriteSheet(new Image("assets/fontwhite.png", false, Image.FILTER_NEAREST).getScaledCopy(7f), 35, 35), ' ');
     }
 
     public static void main(String args[]){
