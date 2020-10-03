@@ -4,10 +4,12 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Rectangle;
 
 public class Spaceship extends TouhouObject{
-    Image shipImg;
+    static Image shipImg;
     final float moveSpeed = 0.7f;
-    public Spaceship() throws SlickException {
+    public Spaceship() {
         hitbox = new Rectangle(885, 800, 150, 98);
+    }
+    public static void init() throws SlickException{
         shipImg = new Image("assets/touhou/ship.png", false, Image.FILTER_NEAREST);
     }
     public void update(GameContainer container, int delta){
@@ -23,7 +25,6 @@ public class Spaceship extends TouhouObject{
         if(container.getInput().isKeyDown(Input.KEY_D)){
             hitbox.setX(Math.min(hitbox.getX() + delta * moveSpeed, 1770));
         }
-
     }
 
     public void render (Graphics g){
