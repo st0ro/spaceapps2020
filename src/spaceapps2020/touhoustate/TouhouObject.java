@@ -8,4 +8,7 @@ public abstract class TouhouObject {
     Shape hitbox;
     public abstract void update(GameContainer container, int delta);
     public abstract void render(Graphics g);
+    public boolean isColliding(TouhouObject other){
+        return hitbox.intersects(other.hitbox);
+    }
 }
