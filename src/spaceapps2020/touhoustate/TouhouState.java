@@ -23,9 +23,14 @@ public class TouhouState extends BasicGameState {
     int debrisCollected;
     int health = 6;
     int invulTimer = 0;
-    int debrisNeeded;
+
+    List<Health> healthList = new ArrayList<>();
     StarManager starManager = new StarManager();
+
+
+    int debrisNeeded;
     Rectangle bar;
+
     @Override
     public int getID() {
         return 2;
@@ -39,6 +44,10 @@ public class TouhouState extends BasicGameState {
         Asteroid.init();
         DebrisPickup.init();
         BigAsteroid.init();
+        Health.init();
+        for (int i = 0; i < health; i++) {
+            healthList.add(new Health(100, 100 + 100 * i));
+        }
 
         ship = new Spaceship();
         explosionImg = new Image("assets/touhou/explosion.png", false, Image.FILTER_NEAREST);
@@ -65,24 +74,29 @@ public class TouhouState extends BasicGameState {
         for (DebrisPickup dp : debrisPickupList) {
             dp.render(graphics);
         }
+
+        for (Health h : healthList) {
+            h.render(graphics);
+        }
+
         ship.render(graphics);
         if (!gameRunning) {
             explosionImg.draw(ship.hitbox.getX() - 20, ship.hitbox.getY() - 20, 7.5f);
         }
-        graphics.drawString("Debris collected: " + debrisCollected, 100, 100);
-        graphics.drawString("Health: " + health, 100, 120);
+
         graphics.setColor(new Color(0x47bc4f));
         graphics.fill(bar);
+
     }
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int delta) throws SlickException {
         if (gameRunning) {
-            if(invulTimer > 0){
+            if (invulTimer > 0) {
                 invulTimer -= delta;
-                Math.max(invulTimer, 0);
+                invulTimer = Math.max(invulTimer, 0);
             }
-            for(int i = 0; i<delta; i++){
+            for (int i = 0; i < delta; i++) {
                 spawn();
             }
             starManager.update(delta);
@@ -106,10 +120,11 @@ public class TouhouState extends BasicGameState {
                     }
                 }
             }
-            if(invulTimer == 0) {
+            if (invulTimer == 0) {
                 for (Debris d : debrisList) {
                     if (ship.isColliding(d)) {
                         damageTaken(1);
+                        System.out.println("dick");
                     }
                 }
                 for (TouhouObject t : asteroidList) {
@@ -117,7 +132,7 @@ public class TouhouState extends BasicGameState {
                         damageTaken(1);
                     }
                 }
-                if(bigAsteroid.isColliding(ship)){
+                if (bigAsteroid.isColliding(ship)) {
                     damageTaken(3);
                 }
             }
@@ -129,7 +144,7 @@ public class TouhouState extends BasicGameState {
                 }
             }
         }
-        updateBar(((float)debrisCollected / debrisNeeded));
+        updateBar(((float) debrisCollected / debrisNeeded));
     }
 
     @Override
@@ -155,27 +170,35 @@ public class TouhouState extends BasicGameState {
     }
 
     public void spawn() {
+
         if (Math.random() < 0.002) {
             debrisList.add(new Debris((float) Math.random() * 1920, -100));
         }
         if (Math.random() < 0.001) {
             asteroidList.add(new Asteroid((float) Math.random() * 1920, -1000));
         }
-        if (Math.random() < 0.0005 && bigAsteroid.hitbox.getY()>5000) {
+        if (Math.random() < 0.0005 && bigAsteroid.hitbox.getY() > 5000) {
             bigAsteroid.hitbox.setY(-7000);
-            bigAsteroid.hitbox.setX((float)(Math.random()*1920));
+            bigAsteroid.hitbox.setX((float) (Math.random() * 1920));
         }
     }
 
     private void damageTaken(int dmg) {
         health -= dmg;
+
+        for (int i = 0; i < dmg; i++)
+            healthList.remove(healthList.size() - 1);
         if (health <= 0) {
-            gameRunning = false;
+
+            if (health <= 0) {
+
+                gameRunning = false;
+            }
+            invulTimer = 2000;
         }
-        invulTimer = 2000;
     }
 
-    public void updateBar(float progress){
-        bar.setWidth((int)(1820 * progress));
+    public void updateBar ( float progress){
+        bar.setWidth((int) (1820 * progress));
     }
 }

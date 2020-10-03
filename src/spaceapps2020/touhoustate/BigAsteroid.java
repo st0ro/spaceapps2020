@@ -1,7 +1,7 @@
 package spaceapps2020.touhoustate;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Rectangle;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+//import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 public class BigAsteroid extends TouhouObject {
     static Image bigAsteroidImg;
