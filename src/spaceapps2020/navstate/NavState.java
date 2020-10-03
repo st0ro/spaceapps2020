@@ -6,9 +6,12 @@ import org.newdawn.slick.state.StateBasedGame;
 import spaceapps2020.EventBasedState;
 import spaceapps2020.NotTouhou;
 import spaceapps2020.ui.Button;
+import spaceapps2020.ui.Label;
 import spaceapps2020.ui.ShapeComponent;
 
 public class NavState extends EventBasedState {
+    static int initial_y = 50;
+    static int initial_x = 1420;
     @Override
     public int getID() {
         return 1;
@@ -35,12 +38,23 @@ public class NavState extends EventBasedState {
         ShapeComponent box = new ShapeComponent(gameContainer, 1650, 530,500,1000, new Color(0x00336),Color.cyan);
         components.add(box);
 
-        Button debris_one = new Button(gameContainer,1800,400,500,500,new Image("assets/nav/thorabledeb.png")){
-            @Override
-            public void onLeftClick(){System.out.println("dick");}
-        };
-        components.add(debris_one);
+        addObjectLabel(gameContainer,"NAME: THOR ABLE STAR//ID: 1960-002D//OBJECT TYPE: DEBRIS//RCS SIZE: SMALL");
 
+    }
+
+    public void addObjectLabel(GameContainer gameContainer, String obj) throws SlickException{
+
+        SpriteSheetFont pixelFontWhite = new SpriteSheetFont(new SpriteSheet(new Image("assets/fontwhite.png", false, Image.FILTER_NEAREST).getScaledCopy(4f), 20, 20), ' ');
+        String [] array = obj.split("//");
+        Label name = new Label(gameContainer,array[0], initial_x,initial_y,pixelFontWhite);
+        Label id = new Label(gameContainer,array[1], initial_x,initial_y + 50,pixelFontWhite);
+        Label type = new Label(gameContainer,array[2], initial_x,initial_y + 100,pixelFontWhite);
+        Label size = new Label(gameContainer,array[3], initial_x,initial_y + 150,pixelFontWhite);
+        components.add(name);
+        components.add(id);
+        components.add(type);
+        components.add(size);
+        initial_y += 300;
     }
 
     @Override

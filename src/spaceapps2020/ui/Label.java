@@ -38,7 +38,7 @@ public class Label extends ScreenComponent {
         this.font = font;
         screenBox = new Rectangle(0, 0, font.getWidth(text), font.getHeight(text));
         setLocation(x, y);
-        alignment = FontUtils.Alignment.CENTER;
+        alignment = FontUtils.Alignment.LEFT;
     }
 
     public Label(GUIContext container, String text, int x, int y, Font font, int align) {

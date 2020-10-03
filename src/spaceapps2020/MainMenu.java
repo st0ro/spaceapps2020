@@ -15,7 +15,7 @@ public class MainMenu extends EventBasedState{
         Button playBtn = new Button(gameContainer, 1400, 900, 330, 120, new Image("assets/mainscreen/playbtn.png")) {
             @Override
             public void onLeftClick() {
-                stateBasedGame.enterState(2);
+                stateBasedGame.enterState(1);
             }
         };
         components.add(playBtn);
