@@ -6,11 +6,13 @@ import org.newdawn.slick.geom.Rectangle;
 public class Spaceship extends TouhouObject{
     static Image shipImg;
     final float moveSpeed = 0.7f;
+    static Color transColor;
     public Spaceship() {
         hitbox = new Rectangle(885, 800, 110, 58);
     }
     public static void init() throws SlickException{
         shipImg = new Image("assets/touhou/ship.png", false, Image.FILTER_NEAREST);
+        transColor = new Color(255, 255, 255, 100);
     }
     public void update(GameContainer container, int delta){
         if(container.getInput().isKeyDown(Input.KEY_W)){
@@ -27,8 +29,14 @@ public class Spaceship extends TouhouObject{
         }
     }
 
-    public void render (Graphics g){
-        shipImg.draw(hitbox.getX() -20, hitbox.getY() - 20, 7.5f);
+    public void render(Graphics g){}
+
+    public void render (Graphics g, int invulTimer){
+        if(invulTimer % 400 > 200){
+            shipImg.draw(hitbox.getX() -20, hitbox.getY() - 20, 7.5f, transColor);
+        }else {
+            shipImg.draw(hitbox.getX() - 20, hitbox.getY() - 20, 7.5f);
+        }
         if(TouhouState.DEBUG){
             g.setColor(Color.red);
             g.draw(hitbox);

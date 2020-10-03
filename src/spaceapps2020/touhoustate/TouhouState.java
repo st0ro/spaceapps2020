@@ -20,6 +20,8 @@ public class TouhouState extends BasicGameState {
     List<DebrisPickup> debrisPickupList = new ArrayList<>();
     Image explosionImg;
     int debrisCollected;
+    int health = 6;
+    int invulTimer = 0;
     StarManager starManager = new StarManager();
     @Override
     public int getID() {
@@ -38,13 +40,12 @@ public class TouhouState extends BasicGameState {
         ship = new Spaceship();
         explosionImg = new Image("assets/touhou/explosion.png", false, Image.FILTER_NEAREST);
         bigAsteroid = new BigAsteroid();
-
     }
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
         starManager.render(graphics);
-        ship.render(graphics);
+        ship.render(graphics, invulTimer);
         if (bigAsteroid != null)
             bigAsteroid.render(graphics);
         for (Laser l : laserList) {
@@ -64,19 +65,26 @@ public class TouhouState extends BasicGameState {
             explosionImg.draw(ship.hitbox.getX() - 20, ship.hitbox.getY() - 20, 7.5f);
         }
         graphics.drawString("Debris collected: " + debrisCollected, 100, 100);
+        graphics.drawString("Health: " + health, 100, 120);
     }
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int delta) throws SlickException {
         if (gameRunning) {
+            if(invulTimer > 0){
+                invulTimer -= delta;
+                Math.max(invulTimer, 0);
+            }
             for(int i = 0; i<delta; i++){
                 spawn();
             }
+            starManager.update(delta);
             ship.update(gameContainer, delta);
             updateAndRemove(gameContainer, delta, laserList);
             updateAndRemove(gameContainer, delta, debrisList);
             updateAndRemove(gameContainer, delta, debrisPickupList);
             updateAndRemove(gameContainer, delta, asteroidList);
+            bigAsteroid.update(gameContainer, delta);
             ListIterator<Laser> liLaser = laserList.listIterator();
             while (liLaser.hasNext()) {
                 Laser l = liLaser.next();
@@ -90,9 +98,19 @@ public class TouhouState extends BasicGameState {
                     }
                 }
             }
-            for (Debris d : debrisList) {
-                if (ship.isColliding(d)) {
-                    gameRunning = false;
+            if(invulTimer == 0) {
+                for (Debris d : debrisList) {
+                    if (ship.isColliding(d)) {
+                        damageTaken(1);
+                    }
+                }
+                for (TouhouObject t : asteroidList) {
+                    if (ship.isColliding(t)) {
+                        damageTaken(1);
+                    }
+                }
+                if(bigAsteroid.isColliding(ship)){
+                    damageTaken(3);
                 }
             }
             ListIterator<DebrisPickup> li = debrisPickupList.listIterator();
@@ -103,13 +121,6 @@ public class TouhouState extends BasicGameState {
                 }
             }
         }
-        starManager.update(delta);
-        ship.update(gameContainer, delta);
-        if (bigAsteroid != null)
-            bigAsteroid.update(gameContainer, delta);
-        updateAndRemove(gameContainer, delta, laserList);
-        updateAndRemove(gameContainer, delta, debrisList);
-        updateAndRemove(gameContainer, delta, asteroidList);
     }
 
     @Override
@@ -138,12 +149,20 @@ public class TouhouState extends BasicGameState {
         if (Math.random() < 0.002) {
             debrisList.add(new Debris((float) Math.random() * 1920, 0));
         }
-        if (Math.random() < 0.002) {
+        if (Math.random() < 0.001) {
             asteroidList.add(new Asteroid((float) Math.random() * 1920, 0));
         }
         if (Math.random() < 0.0005 && bigAsteroid.hitbox.getY()>5000) {
-            bigAsteroid.hitbox.setY(-5000);
+            bigAsteroid.hitbox.setY(-7000);
             bigAsteroid.hitbox.setX((float)(Math.random()*1920));
         }
+    }
+
+    private void damageTaken(int dmg){
+        health -= dmg;
+        if(health <= 0){
+            gameRunning = false;
+        }
+        invulTimer = 2000;
     }
 }

@@ -2,6 +2,7 @@ package spaceapps2020.touhoustate;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Transform;
 
 
 public class Debris extends TouhouObject {
