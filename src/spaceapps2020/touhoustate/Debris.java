@@ -5,13 +5,18 @@ import org.newdawn.slick.geom.Rectangle;
 
 
 public class Debris extends TouhouObject {
-    Image debrisImg;
+    static Image debrisImg;
     float debrisXMoveSpeed = (float)(Math.random() * 2 - 1) * 0.7f;
     float debrisYMoveSpeed = (float)Math.random() * 0.7f;
-    public Debris() throws SlickException {
-        hitbox = new Rectangle(960, 0, 98, 150);
+
+    public static void init() throws SlickException{
         debrisImg = new Image("assets/touhou/debris1.png", false, Image.FILTER_NEAREST);
     }
+
+    public Debris(float x, float y){
+        hitbox = new Rectangle(x, y, 98, 150);
+    }
+
     public void update(GameContainer container, int delta){
         hitbox.setX(hitbox.getX() + delta * debrisXMoveSpeed);
         hitbox.setY(hitbox.getY() + delta * debrisYMoveSpeed);

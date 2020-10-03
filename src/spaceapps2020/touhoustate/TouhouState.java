@@ -13,9 +13,9 @@ import java.util.List;
 public class TouhouState extends BasicGameState {
     public static final boolean DEBUG = false;
 
-    List<Laser> laserList = new ArrayList<>();
     Spaceship ship;
-    Debris debris;
+    List<Laser> laserList = new ArrayList<>();
+    List<Debris> debrisList = new ArrayList<>();
     @Override
     public int getID() {
         return 2;
@@ -25,9 +25,15 @@ public class TouhouState extends BasicGameState {
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         Spaceship.init();
         Laser.init();
+        Debris.init();
 
         ship = new Spaceship();
-        debris = new Debris();
+        debrisList.add(new Debris(960, 0));
+        debrisList.add(new Debris(960, 0));
+        debrisList.add(new Debris(960, 0));
+        debrisList.add(new Debris(960, 0));
+        debrisList.add(new Debris(960, 0));
+        debrisList.add(new Debris(960, 0));
     }
 
     @Override
@@ -36,23 +42,16 @@ public class TouhouState extends BasicGameState {
         for(Laser l:laserList){
             l.render(graphics);
         }
-        graphics.drawString("Lasers alive: " + laserList.size(), 100, 100);
-        debris.render(graphics);
+        for(Debris d:debrisList){
+            d.render(graphics);
+        }
     }
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int delta) throws SlickException {
         ship.update(gameContainer, delta);
-        for(int i = 0; i < laserList.size();){
-            Laser l = laserList.get(i);
-            l.update(gameContainer, delta);
-            if(isOutOfBounds(l)) {
-                laserList.remove(i);
-            }else{
-                i++;
-            }
-        }
-        debris.update(gameContainer, delta);
+        updateAndRemove(gameContainer, delta, laserList);
+        updateAndRemove(gameContainer, delta, debrisList);
     }
 
     @Override
@@ -64,5 +63,17 @@ public class TouhouState extends BasicGameState {
 
     private boolean isOutOfBounds(TouhouObject t){
         return t.hitbox.getMinX() > 1920 || t.hitbox.getMaxX() < 0 || t.hitbox.getMinY() > 1080 || t.hitbox.getMaxY() < 0;
+    }
+
+    private void updateAndRemove(GameContainer gameContainer, int delta, List list){
+        for(int i = 0; i < list.size();){
+            TouhouObject t = (TouhouObject) list.get(i);
+            t.update(gameContainer, delta);
+            if(isOutOfBounds(t)) {
+                list.remove(i);
+            }else{
+                i++;
+            }
+        }
     }
 }
