@@ -13,6 +13,7 @@ public class TouhouState extends BasicGameState {
 
     boolean gameRunning = true;
     Spaceship ship;
+    BigAsteroid bigAsteroid;
     List<Laser> laserList = new ArrayList<>();
     List<Debris> debrisList = new ArrayList<>();
     List<Asteroid> asteroidList = new ArrayList<>();
@@ -31,6 +32,7 @@ public class TouhouState extends BasicGameState {
         Debris.init();
         Asteroid.init();
         DebrisPickup.init();
+        BigAsteroid.init();
 
         ship = new Spaceship();
         explosionImg = new Image("assets/touhou/explosion.png", false, Image.FILTER_NEAREST);
@@ -51,10 +53,13 @@ public class TouhouState extends BasicGameState {
         debrisList.add(new Debris((float)Math.random()*960, 0));
         debrisList.add(new Debris((float)Math.random()*960, 0));
         debrisList.add(new Debris((float)Math.random()*960, 0));
+        bigAsteroid = new BigAsteroid();
     }
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
+        ship.render(graphics);
+        bigAsteroid.render(graphics);
         for(Laser l:laserList){
             l.render(graphics);
         }
@@ -108,6 +113,11 @@ public class TouhouState extends BasicGameState {
                 }
             }
         }
+        ship.update(gameContainer, delta);
+        bigAsteroid.update(gameContainer, delta);
+        updateAndRemove(gameContainer, delta, laserList);
+        updateAndRemove(gameContainer, delta, debrisList);
+        updateAndRemove(gameContainer, delta, asteroidList);
     }
 
     @Override
