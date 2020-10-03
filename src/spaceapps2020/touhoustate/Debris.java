@@ -20,7 +20,7 @@ public class Debris extends TouhouObject {
     }
 
     public Debris(float x, float y){
-        index = (int) (Math.random() * 3) + 0;
+        index = (int) (Math.random() * 3);
         if (index == 0) {
             hitbox = new Rectangle(x, y, 98, 150);
         }

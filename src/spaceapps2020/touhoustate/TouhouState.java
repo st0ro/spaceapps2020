@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class TouhouState extends BasicGameState {
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = false ;
 
     boolean gameRunning = true;
     Spaceship ship;
@@ -102,6 +102,7 @@ public class TouhouState extends BasicGameState {
                         debrisPickupList.add(new DebrisPickup(d.hitbox.getX(), d.hitbox.getY()));
                         liLaser.remove();
                         liDebris.remove();
+                        break;
                     }
                 }
             }
@@ -139,7 +140,7 @@ public class TouhouState extends BasicGameState {
     }
 
     private boolean isOutOfBounds(TouhouObject t) {
-        return t.hitbox.getMinX() > 1920 || t.hitbox.getMaxX() < 0 || t.hitbox.getMinY() > 1080 || t.hitbox.getMaxY() < 0;
+        return t.hitbox.getMinX() > 2920 || t.hitbox.getMaxX() < -1000 || t.hitbox.getMinY() > 2080 || t.hitbox.getMaxY() < -1000;
     }
 
     private void updateAndRemove(GameContainer gameContainer, int delta, List list) {
@@ -155,10 +156,10 @@ public class TouhouState extends BasicGameState {
 
     public void spawn() {
         if (Math.random() < 0.002) {
-            debrisList.add(new Debris((float) Math.random() * 1920, 0));
+            debrisList.add(new Debris((float) Math.random() * 1920, -100));
         }
         if (Math.random() < 0.001) {
-            asteroidList.add(new Asteroid((float) Math.random() * 1920, 0));
+            asteroidList.add(new Asteroid((float) Math.random() * 1920, -1000));
         }
         if (Math.random() < 0.0005 && bigAsteroid.hitbox.getY()>5000) {
             bigAsteroid.hitbox.setY(-7000);
