@@ -17,7 +17,7 @@ public class NavState extends EventBasedState {
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        Button backBtn = new Button(gameContainer, 1400, 900, 330, 120, new Image("assets/nav/back.png")) {
+        Button backBtn = new Button(gameContainer, 100, 100, 330, 120, new Image("assets/nav/back.png")) {
             @Override
             public void onLeftClick() {
                 stateBasedGame.enterState(0);
@@ -25,12 +25,7 @@ public class NavState extends EventBasedState {
         };
         components.add(backBtn);
     }
-
-    @Override
-    public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
-
-    }
-
+    
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
 
