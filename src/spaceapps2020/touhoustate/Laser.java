@@ -5,7 +5,7 @@ import org.newdawn.slick.geom.Rectangle;
 
 public class Laser extends TouhouObject{
     static Image laserImg;
-    final float moveSpeed = 1.6f;
+    final float moveSpeed = 1.8f;
 
     public static void init() throws SlickException {
         laserImg = new Image("assets/touhou/laser.png", false, Image.FILTER_NEAREST);
