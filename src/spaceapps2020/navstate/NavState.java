@@ -5,8 +5,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import spaceapps2020.EventBasedState;
 
-public class NavState extends BasicGameState {
+public class NavState extends EventBasedState {
     @Override
     public int getID() {
         return 1;
