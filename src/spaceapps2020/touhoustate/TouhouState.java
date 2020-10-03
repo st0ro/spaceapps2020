@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TouhouState extends BasicGameState {
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     Spaceship ship;
     List<Laser> laserList = new ArrayList<>();
