@@ -15,6 +15,7 @@ public class TouhouState extends BasicGameState {
 
     List<Laser> laserList = new ArrayList<>();
     Spaceship ship;
+    Debris debris;
     @Override
     public int getID() {
         return 2;
@@ -26,6 +27,7 @@ public class TouhouState extends BasicGameState {
         Laser.init();
 
         ship = new Spaceship();
+        debris = new Debris();
     }
 
     @Override
@@ -35,6 +37,7 @@ public class TouhouState extends BasicGameState {
             l.render(graphics);
         }
         graphics.drawString("Lasers alive: " + laserList.size(), 100, 100);
+        debris.render(graphics);
     }
 
     @Override
@@ -49,6 +52,7 @@ public class TouhouState extends BasicGameState {
                 i++;
             }
         }
+        debris.update(gameContainer, delta);
     }
 
     @Override
