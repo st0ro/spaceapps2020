@@ -5,16 +5,30 @@ import org.newdawn.slick.geom.Rectangle;
 
 
 public class Debris extends TouhouObject {
-    static Image debrisImg;
+    static Image[] debrisImg = new Image[3];
     float debrisXMoveSpeed = (float)(Math.random() * 2 - 1) * 0.7f;
     float debrisYMoveSpeed = (float)Math.random() * 0.7f;
+    int index;
+    static int[] offsetXList = {-5, 2, -22};
+    static int[] offsetYList = {0, -35, -15};
 
     public static void init() throws SlickException{
-        debrisImg = new Image("assets/touhou/debris1.png", false, Image.FILTER_NEAREST);
+        debrisImg[0] = new Image("assets/touhou/debris1.png", false, Image.FILTER_NEAREST);
+        debrisImg[1] = new Image("assets/touhou/debris2.png", false, Image.FILTER_NEAREST);
+        debrisImg[2] = new Image("assets/touhou/debris3.png", false, Image.FILTER_NEAREST);
     }
 
     public Debris(float x, float y){
-        hitbox = new Rectangle(x, y, 98, 150);
+        index = (int) (Math.random() * 3) + 0;
+        if (index == 0) {
+            hitbox = new Rectangle(x, y, 98, 150);
+        }
+        else if (index == 1) {
+            hitbox = new Rectangle(x, y, 155, 55);
+        }
+        else {
+            hitbox = new Rectangle(x, y, 110, 110);
+        }
     }
 
     public void update(GameContainer container, int delta){
@@ -23,7 +37,7 @@ public class Debris extends TouhouObject {
     }
 
     public void render (Graphics g){
-        debrisImg.draw(hitbox.getX(), hitbox.getY(), 7.5f);
+        debrisImg[index].draw(hitbox.getX() + offsetXList[index], hitbox.getY() + offsetYList[index], 7.5f);
         if(TouhouState.DEBUG) {
             g.setColor(Color.red);
             g.draw(hitbox);
