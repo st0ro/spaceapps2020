@@ -9,7 +9,7 @@ public class MainMenu extends EventBasedState{
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        components.add(new ImageComponent())
+        components.add(new ImageComponent(gameContainer, "assets/mainscreen/title_screen.png", NotTouhou.WIDTH/2, NotTouhou.HEIGHT/2, NotTouhou.WIDTH, NotTouhou.HEIGHT));
     }
 
     @Override

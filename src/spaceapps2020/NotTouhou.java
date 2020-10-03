@@ -17,6 +17,7 @@ public class NotTouhou extends StateBasedGame {
 
     @Override
     public void initStatesList(GameContainer gameContainer) throws SlickException {
+        addState(new MainMenu());
         addState(new NavState());
         addState(new TouhouState());
     }
