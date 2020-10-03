@@ -1,6 +1,7 @@
 package spaceapps2020.touhoustate;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -22,7 +23,9 @@ public class TouhouState extends BasicGameState {
     int debrisCollected;
     int health = 6;
     int invulTimer = 0;
+    int debrisNeeded;
     StarManager starManager = new StarManager();
+    Rectangle bar;
     @Override
     public int getID() {
         return 2;
@@ -40,6 +43,8 @@ public class TouhouState extends BasicGameState {
         ship = new Spaceship();
         explosionImg = new Image("assets/touhou/explosion.png", false, Image.FILTER_NEAREST);
         bigAsteroid = new BigAsteroid();
+        debrisNeeded = 10;
+        bar = new Rectangle(50, 1000, 0, 40);
     }
 
     @Override
@@ -66,6 +71,8 @@ public class TouhouState extends BasicGameState {
         }
         graphics.drawString("Debris collected: " + debrisCollected, 100, 100);
         graphics.drawString("Health: " + health, 100, 120);
+        graphics.setColor(new Color(0x47bc4f));
+        graphics.fill(bar);
     }
 
     @Override
@@ -122,6 +129,7 @@ public class TouhouState extends BasicGameState {
                 }
             }
         }
+        updateBar(((float)debrisCollected / debrisNeeded));
     }
 
     @Override
@@ -159,11 +167,15 @@ public class TouhouState extends BasicGameState {
         }
     }
 
-    private void damageTaken(int dmg){
+    private void damageTaken(int dmg) {
         health -= dmg;
-        if(health <= 0){
+        if (health <= 0) {
             gameRunning = false;
         }
         invulTimer = 2000;
+    }
+
+    public void updateBar(float progress){
+        bar.setWidth((int)(1820 * progress));
     }
 }
