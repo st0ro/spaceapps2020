@@ -1,8 +1,6 @@
 package spaceapps2020;
 
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
 import spaceapps2020.navstate.NavState;
 import spaceapps2020.touhoustate.TouhouState;
@@ -10,6 +8,7 @@ import spaceapps2020.touhoustate.TouhouState;
 public class NotTouhou extends StateBasedGame {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
+    public static SpriteSheetFont pixelFontBlack;
 
     public NotTouhou() {
         super("Not Touhou");
@@ -20,6 +19,7 @@ public class NotTouhou extends StateBasedGame {
         addState(new MainMenu());
         addState(new NavState());
         addState(new TouhouState());
+        pixelFontBlack = new SpriteSheetFont(new SpriteSheet(new Image("assets/fontblack.png", false, Image.FILTER_NEAREST).getScaledCopy(7f), 35, 35), ' ');
     }
 
     public static void main(String args[]){
