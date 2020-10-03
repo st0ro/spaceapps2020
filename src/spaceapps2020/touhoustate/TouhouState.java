@@ -1,6 +1,7 @@
 package spaceapps2020.touhoustate;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class TouhouState extends BasicGameState {
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     boolean gameRunning = true;
     Spaceship ship;
@@ -22,9 +23,13 @@ public class TouhouState extends BasicGameState {
     int debrisCollected;
     int health = 6;
     int invulTimer = 0;
+
     List<Health> healthList = new ArrayList<>();
     StarManager starManager = new StarManager();
 
+
+    int debrisNeeded;
+    Rectangle bar;
 
     @Override
     public int getID() {
@@ -47,6 +52,8 @@ public class TouhouState extends BasicGameState {
         ship = new Spaceship();
         explosionImg = new Image("assets/touhou/explosion.png", false, Image.FILTER_NEAREST);
         bigAsteroid = new BigAsteroid();
+        debrisNeeded = 10;
+        bar = new Rectangle(50, 1000, 0, 40);
     }
 
     @Override
@@ -68,7 +75,7 @@ public class TouhouState extends BasicGameState {
             dp.render(graphics);
         }
 
-        for(Health h : healthList){
+        for (Health h : healthList) {
             h.render(graphics);
         }
 
@@ -76,16 +83,20 @@ public class TouhouState extends BasicGameState {
         if (!gameRunning) {
             explosionImg.draw(ship.hitbox.getX() - 20, ship.hitbox.getY() - 20, 7.5f);
         }
+
+        graphics.setColor(new Color(0x47bc4f));
+        graphics.fill(bar);
+
     }
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int delta) throws SlickException {
         if (gameRunning) {
-            if(invulTimer > 0){
+            if (invulTimer > 0) {
                 invulTimer -= delta;
-                Math.max(invulTimer, 0);
+                invulTimer = Math.max(invulTimer, 0);
             }
-            for(int i = 0; i<delta; i++){
+            for (int i = 0; i < delta; i++) {
                 spawn();
             }
             starManager.update(delta);
@@ -105,13 +116,15 @@ public class TouhouState extends BasicGameState {
                         debrisPickupList.add(new DebrisPickup(d.hitbox.getX(), d.hitbox.getY()));
                         liLaser.remove();
                         liDebris.remove();
+                        break;
                     }
                 }
             }
-            if(invulTimer == 0) {
+            if (invulTimer == 0) {
                 for (Debris d : debrisList) {
                     if (ship.isColliding(d)) {
                         damageTaken(1);
+                        System.out.println("dick");
                     }
                 }
                 for (TouhouObject t : asteroidList) {
@@ -119,7 +132,7 @@ public class TouhouState extends BasicGameState {
                         damageTaken(1);
                     }
                 }
-                if(bigAsteroid.isColliding(ship)){
+                if (bigAsteroid.isColliding(ship)) {
                     damageTaken(3);
                 }
             }
@@ -131,6 +144,7 @@ public class TouhouState extends BasicGameState {
                 }
             }
         }
+        updateBar(((float) debrisCollected / debrisNeeded));
     }
 
     @Override
@@ -141,7 +155,7 @@ public class TouhouState extends BasicGameState {
     }
 
     private boolean isOutOfBounds(TouhouObject t) {
-        return t.hitbox.getMinX() > 1920 || t.hitbox.getMaxX() < 0 || t.hitbox.getMinY() > 1080 || t.hitbox.getMaxY() < 0;
+        return t.hitbox.getMinX() > 2920 || t.hitbox.getMaxX() < -1000 || t.hitbox.getMinY() > 2080 || t.hitbox.getMaxY() < -1000;
     }
 
     private void updateAndRemove(GameContainer gameContainer, int delta, List list) {
@@ -158,24 +172,33 @@ public class TouhouState extends BasicGameState {
     public void spawn() {
 
         if (Math.random() < 0.002) {
-            debrisList.add(new Debris((float) Math.random() * 1920, 0));
+            debrisList.add(new Debris((float) Math.random() * 1920, -100));
         }
         if (Math.random() < 0.001) {
-            asteroidList.add(new Asteroid((float) Math.random() * 1920, 0));
+            asteroidList.add(new Asteroid((float) Math.random() * 1920, -1000));
         }
-        if (Math.random() < 0.0005 && bigAsteroid.hitbox.getY()>5000) {
+        if (Math.random() < 0.0005 && bigAsteroid.hitbox.getY() > 5000) {
             bigAsteroid.hitbox.setY(-7000);
-            bigAsteroid.hitbox.setX((float)(Math.random()*1920));
+            bigAsteroid.hitbox.setX((float) (Math.random() * 1920));
         }
     }
 
-    private void damageTaken(int dmg){
+    private void damageTaken(int dmg) {
         health -= dmg;
-        for(int i = 0 ; i < dmg;i ++)
-            healthList.remove(healthList.size()-1);
-        if(health <= 0){
-            gameRunning = false;
+
+        for (int i = 0; i < dmg; i++)
+            healthList.remove(healthList.size() - 1);
+        if (health <= 0) {
+
+            if (health <= 0) {
+
+                gameRunning = false;
+            }
+            invulTimer = 2000;
         }
-        invulTimer = 2000;
+    }
+
+    public void updateBar ( float progress){
+        bar.setWidth((int) (1820 * progress));
     }
 }
