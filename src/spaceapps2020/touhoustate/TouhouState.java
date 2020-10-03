@@ -37,45 +37,30 @@ public class TouhouState extends BasicGameState {
 
         ship = new Spaceship();
         explosionImg = new Image("assets/touhou/explosion.png", false, Image.FILTER_NEAREST);
-        debrisList.add(new Debris(960, 0));
-        debrisList.add(new Debris(960, 0));
-        debrisList.add(new Debris(960, 0));
-        debrisList.add(new Debris(960, 0));
-        debrisList.add(new Debris(960, 0));
-        debrisList.add(new Debris(960, 0));
-        asteroidList.add(new Asteroid(960, 0));
-        asteroidList.add(new Asteroid(960, 0));
-        asteroidList.add(new Asteroid(960, 0));
-        asteroidList.add(new Asteroid(960, 0));
-
-        debrisList.add(new Debris((float)Math.random()*960, 0));
-        debrisList.add(new Debris((float)Math.random()*960, 0));
-        debrisList.add(new Debris((float)Math.random()*960, 0));
-        debrisList.add(new Debris((float)Math.random()*960, 0));
-        debrisList.add(new Debris((float)Math.random()*960, 0));
-        debrisList.add(new Debris((float)Math.random()*960, 0));
         bigAsteroid = new BigAsteroid();
+
     }
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
         starManager.render(graphics);
         ship.render(graphics);
-        bigAsteroid.render(graphics);
-        for(Laser l:laserList){
+        if (bigAsteroid != null)
+            bigAsteroid.render(graphics);
+        for (Laser l : laserList) {
             l.render(graphics);
         }
-        for(Debris d:debrisList){
+        for (Debris d : debrisList) {
             d.render(graphics);
         }
-        for(Asteroid s:asteroidList){
+        for (Asteroid s : asteroidList) {
             s.render(graphics);
         }
-        for(DebrisPickup dp:debrisPickupList){
+        for (DebrisPickup dp : debrisPickupList) {
             dp.render(graphics);
         }
         ship.render(graphics);
-        if(!gameRunning){
+        if (!gameRunning) {
             explosionImg.draw(ship.hitbox.getX() - 20, ship.hitbox.getY() - 20, 7.5f);
         }
         graphics.drawString("Debris collected: " + debrisCollected, 100, 100);
@@ -83,33 +68,36 @@ public class TouhouState extends BasicGameState {
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int delta) throws SlickException {
-        if(gameRunning) {
+        if (gameRunning) {
+            for(int i = 0; i<delta; i++){
+                spawn();
+            }
             ship.update(gameContainer, delta);
             updateAndRemove(gameContainer, delta, laserList);
             updateAndRemove(gameContainer, delta, debrisList);
             updateAndRemove(gameContainer, delta, debrisPickupList);
             updateAndRemove(gameContainer, delta, asteroidList);
             ListIterator<Laser> liLaser = laserList.listIterator();
-            while(liLaser.hasNext()){
+            while (liLaser.hasNext()) {
                 Laser l = liLaser.next();
                 ListIterator<Debris> liDebris = debrisList.listIterator();
-                while(liDebris.hasNext()){
+                while (liDebris.hasNext()) {
                     Debris d = liDebris.next();
-                    if(l.isColliding(d)){
+                    if (l.isColliding(d)) {
                         debrisPickupList.add(new DebrisPickup(d.hitbox.getX(), d.hitbox.getY()));
                         liLaser.remove();
                         liDebris.remove();
                     }
                 }
             }
-            for(Debris d:debrisList){
-                if(ship.isColliding(d)){
+            for (Debris d : debrisList) {
+                if (ship.isColliding(d)) {
                     gameRunning = false;
                 }
             }
             ListIterator<DebrisPickup> li = debrisPickupList.listIterator();
-            while(li.hasNext()){
-                if(li.next().isColliding(ship)){
+            while (li.hasNext()) {
+                if (li.next().isColliding(ship)) {
                     li.remove();
                     debrisCollected++;
                 }
@@ -117,31 +105,45 @@ public class TouhouState extends BasicGameState {
         }
         starManager.update(delta);
         ship.update(gameContainer, delta);
-        bigAsteroid.update(gameContainer, delta);
+        if (bigAsteroid != null)
+            bigAsteroid.update(gameContainer, delta);
         updateAndRemove(gameContainer, delta, laserList);
         updateAndRemove(gameContainer, delta, debrisList);
         updateAndRemove(gameContainer, delta, asteroidList);
     }
 
     @Override
-    public void keyPressed(int key, char c){
-        if(key == Input.KEY_SPACE){
+    public void keyPressed(int key, char c) {
+        if (key == Input.KEY_SPACE) {
             laserList.add(new Laser(ship.hitbox.getX() + 25, ship.hitbox.getY()));
         }
     }
 
-    private boolean isOutOfBounds(TouhouObject t){
+    private boolean isOutOfBounds(TouhouObject t) {
         return t.hitbox.getMinX() > 1920 || t.hitbox.getMaxX() < 0 || t.hitbox.getMinY() > 1080 || t.hitbox.getMaxY() < 0;
     }
 
-    private void updateAndRemove(GameContainer gameContainer, int delta, List list){
+    private void updateAndRemove(GameContainer gameContainer, int delta, List list) {
         ListIterator<TouhouObject> li = list.listIterator();
-        while(li.hasNext()){
+        while (li.hasNext()) {
             TouhouObject t = li.next();
             t.update(gameContainer, delta);
-            if(isOutOfBounds(t)){
+            if (isOutOfBounds(t)) {
                 li.remove();
             }
+        }
+    }
+
+    public void spawn() {
+        if (Math.random() < 0.002) {
+            debrisList.add(new Debris((float) Math.random() * 1920, 0));
+        }
+        if (Math.random() < 0.002) {
+            asteroidList.add(new Asteroid((float) Math.random() * 1920, 0));
+        }
+        if (Math.random() < 0.0005 && bigAsteroid.hitbox.getY()>5000) {
+            bigAsteroid.hitbox.setY(-5000);
+            bigAsteroid.hitbox.setX((float)(Math.random()*1920));
         }
     }
 }
