@@ -10,11 +10,11 @@ public class Asteroid extends TouhouObject {
     float asteroidYMoveSpeed = (float)Math.random() * 0.4f;
 
     public static void init() throws SlickException{
-        asteroidImg = new Image("assets/touhou/asteroid.png", false, Image.FILTER_NEAREST);
+        asteroidImg = new Image("assets/touhou/Asteroid1.png", false, Image.FILTER_NEAREST);
     }
 
     public Asteroid(float x, float y){
-            hitbox = new Rectangle(x, y, 50, 60);
+            hitbox = new Rectangle(x, y, 130, 130);
     }
 
     public void update(GameContainer container, int delta){
@@ -23,7 +23,7 @@ public class Asteroid extends TouhouObject {
     }
 
     public void render (Graphics g){
-        asteroidImg.draw(hitbox.getX() - 38, hitbox.getY() + -80, 7.5f);
+        asteroidImg.draw(hitbox.getX() - 11, hitbox.getY() - 11, 7.5f);
         if(TouhouState.DEBUG) {
             g.setColor(Color.red);
             g.draw(hitbox);
