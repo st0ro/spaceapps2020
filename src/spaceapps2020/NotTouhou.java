@@ -1,7 +1,11 @@
+package spaceapps2020;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import spaceapps2020.navstate.NavState;
+import spaceapps2020.touhoustate.TouhouState;
 
 public class NotTouhou extends StateBasedGame {
 
@@ -13,7 +17,8 @@ public class NotTouhou extends StateBasedGame {
 
     @Override
     public void initStatesList(GameContainer gameContainer) throws SlickException {
-
+        addState(new NavState());
+        addState(new TouhouState());
     }
 
     public static void main(String args[]){
