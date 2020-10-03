@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class TouhouState extends BasicGameState {
-    public static final boolean DEBUG = false ;
+    public static final boolean DEBUG = true ;
 
     boolean gameRunning = true;
     Spaceship ship;
