@@ -20,16 +20,17 @@ public class TouhouState extends BasicGameState {
     List<Asteroid> asteroidList = new ArrayList<>();
     List<DebrisPickup> debrisPickupList = new ArrayList<>();
     Image explosionImg;
-    int debrisCollected;
+    Image shieldImg;
+    int debrisCollected, debrisNeeded = 40;
     int health = 6;
     int invulTimer = 0;
+    Color barColor;
+    Image loseImg;
+    Image winImg;
+    boolean hasWon = false;
 
-    List<Health> healthList = new ArrayList<>();
+
     StarManager starManager = new StarManager();
-
-
-    int debrisNeeded;
-    Rectangle bar;
 
     @Override
     public int getID() {
@@ -44,16 +45,14 @@ public class TouhouState extends BasicGameState {
         Asteroid.init();
         DebrisPickup.init();
         BigAsteroid.init();
-        Health.init();
-        for (int i = 0; i < health; i++) {
-            healthList.add(new Health(100, 100 + 100 * i));
-        }
 
         ship = new Spaceship();
         explosionImg = new Image("assets/touhou/explosion.png", false, Image.FILTER_NEAREST);
+        shieldImg =  new Image("assets/touhou/shield.png", false, Image.FILTER_NEAREST);
         bigAsteroid = new BigAsteroid();
-        debrisNeeded = 10;
-        bar = new Rectangle(50, 1000, 0, 40);
+        barColor = new Color(0x47bc4f);
+        loseImg = new Image("assets/touhou/LossScreen.png", false, Image.FILTER_NEAREST);
+        winImg = new Image("assets/touhou/VictoryScreen.png", false, Image.FILTER_NEAREST);
     }
 
     @Override
@@ -75,18 +74,24 @@ public class TouhouState extends BasicGameState {
             dp.render(graphics);
         }
 
-        for (Health h : healthList) {
-            h.render(graphics);
-        }
-
         ship.render(graphics);
-        if (!gameRunning) {
-            explosionImg.draw(ship.hitbox.getX() - 20, ship.hitbox.getY() - 20, 7.5f);
+
+
+        for(int i = 0; i < health; i++){
+            shieldImg.draw(50 + i * 80, 900, 7.5f);
         }
+        graphics.setColor(barColor);
+        graphics.fillRect(50, 1000, (float)debrisCollected/debrisNeeded * 1820f, 40);
 
-        graphics.setColor(new Color(0x47bc4f));
-        graphics.fill(bar);
-
+        if (!gameRunning) {
+            if (hasWon) {
+                winImg.draw(200, 190, 7.5f);
+            }
+            else {
+                explosionImg.draw(ship.hitbox.getX() - 20, ship.hitbox.getY() - 20, 7.5f);
+                loseImg.draw(200, 190, 7.5f);
+            }
+        }
     }
 
     @Override
@@ -135,6 +140,14 @@ public class TouhouState extends BasicGameState {
                     damageTaken(3);
                 }
             }
+            if (health <= 0 ) {
+                gameRunning = false;
+            }
+            if (debrisCollected >= debrisNeeded) {
+                gameRunning = false;
+                hasWon = true;
+            }
+
             ListIterator<DebrisPickup> li = debrisPickupList.listIterator();
             while (li.hasNext()) {
                 if (li.next().isColliding(ship)) {
@@ -143,7 +156,12 @@ public class TouhouState extends BasicGameState {
                 }
             }
         }
-        updateBar(((float) debrisCollected / debrisNeeded));
+
+        else {
+            if(gameContainer.getInput().isKeyDown(Input.KEY_SPACE)){
+                stateBasedGame.enterState(1);
+            }
+        }
     }
 
     @Override
@@ -184,16 +202,9 @@ public class TouhouState extends BasicGameState {
 
     private void damageTaken(int dmg) {
         health -= dmg;
-
-        for (int i = 0; i < dmg; i++)
-            healthList.remove(healthList.size() - 1);
         if (health <= 0) {
             gameRunning = false;
         }
         invulTimer = 2000;
-    }
-
-    public void updateBar ( float progress){
-        bar.setWidth((int) (1820 * progress));
     }
 }
