@@ -25,6 +25,10 @@ public class TouhouState extends BasicGameState {
     int health = 6;
     int invulTimer = 0;
     Color barColor;
+    Image loseImg;
+    Image winImg;
+    boolean hasWon = false;
+
 
     StarManager starManager = new StarManager();
 
@@ -47,6 +51,8 @@ public class TouhouState extends BasicGameState {
         shieldImg =  new Image("assets/touhou/shield.png", false, Image.FILTER_NEAREST);
         bigAsteroid = new BigAsteroid();
         barColor = new Color(0x47bc4f);
+        loseImg = new Image("assets/touhou/LossScreen.png", false, Image.FILTER_NEAREST);
+        winImg = new Image("assets/touhou/VictoryScreen.png", false, Image.FILTER_NEAREST);
     }
 
     @Override
@@ -69,15 +75,23 @@ public class TouhouState extends BasicGameState {
         }
 
         ship.render(graphics);
-        if (!gameRunning) {
-            explosionImg.draw(ship.hitbox.getX() - 20, ship.hitbox.getY() - 20, 7.5f);
-        }
+
 
         for(int i = 0; i < health; i++){
             shieldImg.draw(50 + i * 80, 900, 7.5f);
         }
         graphics.setColor(barColor);
         graphics.fillRect(50, 1000, (float)debrisCollected/debrisNeeded * 1820f, 40);
+
+        if (!gameRunning) {
+            if (hasWon) {
+                winImg.draw(200, 190, 7.5f);
+            }
+            else {
+                explosionImg.draw(ship.hitbox.getX() - 20, ship.hitbox.getY() - 20, 7.5f);
+                loseImg.draw(200, 190, 7.5f);
+            }
+        }
     }
 
     @Override
@@ -131,6 +145,7 @@ public class TouhouState extends BasicGameState {
             }
             if (debrisCollected >= debrisNeeded) {
                 gameRunning = false;
+                hasWon = true;
             }
 
             ListIterator<DebrisPickup> li = debrisPickupList.listIterator();
