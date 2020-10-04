@@ -86,7 +86,6 @@ public class TouhouState extends BasicGameState {
 
         graphics.setColor(new Color(0x47bc4f));
         graphics.fill(bar);
-
     }
 
     @Override
@@ -135,6 +134,13 @@ public class TouhouState extends BasicGameState {
                     damageTaken(3);
                 }
             }
+            if (health <= 0 ) {
+                gameRunning = false;
+            }
+            if (debrisCollected >= debrisNeeded) {
+                gameRunning = false;
+            }
+
             ListIterator<DebrisPickup> li = debrisPickupList.listIterator();
             while (li.hasNext()) {
                 if (li.next().isColliding(ship)) {
@@ -143,6 +149,14 @@ public class TouhouState extends BasicGameState {
                 }
             }
         }
+
+        else {
+            if(gameContainer.getInput().isKeyDown(Input.KEY_SPACE)){
+                stateBasedGame.enterState(1);
+            }
+        }
+
+
         updateBar(((float) debrisCollected / debrisNeeded));
     }
 
