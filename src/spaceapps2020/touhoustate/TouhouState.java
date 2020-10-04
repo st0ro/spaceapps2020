@@ -4,6 +4,9 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
+import spaceapps2020.NotTouhou;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +84,7 @@ public class TouhouState extends BasicGameState {
             shieldImg.draw(50 + i * 80, 900, 7.5f);
         }
         graphics.setColor(barColor);
-        graphics.fillRect(50, 1000, (float)debrisCollected/debrisNeeded * 1820f, 40);
+        graphics.fillRect(50, 1010, (float)debrisCollected/debrisNeeded * 1820f, 30);
 
         if (!gameRunning) {
             if (hasWon) {
@@ -158,10 +161,27 @@ public class TouhouState extends BasicGameState {
         }
 
         else {
-            if(gameContainer.getInput().isKeyDown(Input.KEY_SPACE)){
-                stateBasedGame.enterState(1);
+            if(gameContainer.getInput().isKeyDown(Input.KEY_ENTER)){
+                stateBasedGame.enterState(1, new FadeOutTransition(Color.black, NotTouhou.FADE_TIME), new FadeInTransition(Color.black, NotTouhou.FADE_TIME));
             }
         }
+    }
+
+    @Override
+    public void leave(GameContainer container, StateBasedGame sBG) throws SlickException{
+        gameRunning = true;
+        hasWon = false;
+        health = 6;
+        invulTimer = 0;
+        debrisCollected = 0;
+
+        ship.hitbox.setLocation(885, 800);
+        laserList.clear();
+        debrisList.clear();
+        asteroidList.clear();
+        debrisPickupList.clear();
+        bigAsteroid.hitbox.setY(-7000);
+        bigAsteroid.hitbox.setX((float) (Math.random() * 1920));
     }
 
     @Override
@@ -205,6 +225,6 @@ public class TouhouState extends BasicGameState {
         if (health <= 0) {
             gameRunning = false;
         }
-        invulTimer = 2000;
+        invulTimer = 1200;
     }
 }

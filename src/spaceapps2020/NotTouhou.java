@@ -8,6 +8,7 @@ import spaceapps2020.touhoustate.TouhouState;
 public class NotTouhou extends StateBasedGame {
 
     public static final int WIDTH = 1920, HEIGHT = 1080;
+    public static final int FADE_TIME = 100;
     public static SpriteSheetFont pixelFontBlack;
     public static SpriteSheetFont pixelFontWhite;
 
