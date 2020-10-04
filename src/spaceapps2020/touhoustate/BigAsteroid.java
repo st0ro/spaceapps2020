@@ -15,7 +15,7 @@ public class BigAsteroid extends TouhouObject {
     }
 
     public BigAsteroid(){
-        hitbox = new Rectangle(bigAsteroidX, -8000, 450, 450);
+        hitbox = new Rectangle(bigAsteroidX, -8000, 300, 425);
     }
 
     public void update(GameContainer container, int delta){
@@ -23,9 +23,9 @@ public class BigAsteroid extends TouhouObject {
     }
 
     public void render (Graphics g){
-        bigAsteroidImg.draw(hitbox.getX(), hitbox.getY(), 7.5f);
+        bigAsteroidImg.draw(hitbox.getX() - 80, hitbox.getY(), 7.5f);
         if(hitbox.getY() < 0 && hitbox.getY() > -4500){
-            alertImg.draw(hitbox.getCenterX() - 75, 20, 7.5f);
+            alertImg.draw(hitbox.getCenterX() - 75, -5, 7.5f);
         }
         if(TouhouState.DEBUG) {
             g.setColor(Color.red);
