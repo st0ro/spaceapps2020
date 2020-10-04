@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class TouhouState extends BasicGameState {
-    public static final boolean DEBUG = true ;
+    public static final boolean DEBUG = false;
 
     boolean gameRunning = true;
     Spaceship ship;
@@ -126,12 +126,25 @@ public class TouhouState extends BasicGameState {
                     damageTaken(3);
                 }
             }
+            if (health <= 0 ) {
+                gameRunning = false;
+            }
+            if (debrisCollected >= debrisNeeded) {
+                gameRunning = false;
+            }
+
             ListIterator<DebrisPickup> li = debrisPickupList.listIterator();
             while (li.hasNext()) {
                 if (li.next().isColliding(ship)) {
                     li.remove();
                     debrisCollected++;
                 }
+            }
+        }
+
+        else {
+            if(gameContainer.getInput().isKeyDown(Input.KEY_SPACE)){
+                stateBasedGame.enterState(1);
             }
         }
     }
