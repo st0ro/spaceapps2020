@@ -29,7 +29,7 @@ public class NotTouhou extends StateBasedGame {
             AppGameContainer app = new AppGameContainer(new NotTouhou()); //create game in container
             app.setDisplayMode(WIDTH, HEIGHT, true); //set window size and if fullscreen
             app.setTargetFrameRate(120);
-            app.setShowFPS(true);
+            app.setShowFPS(false);
             app.start();
         } catch (SlickException e) {
             e.printStackTrace(); //in case of failure to start game, will print error
