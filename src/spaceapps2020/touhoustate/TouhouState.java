@@ -124,7 +124,6 @@ public class TouhouState extends BasicGameState {
                 for (Debris d : debrisList) {
                     if (ship.isColliding(d)) {
                         damageTaken(1);
-                        System.out.println("dick");
                     }
                 }
                 for (TouhouObject t : asteroidList) {
@@ -189,13 +188,9 @@ public class TouhouState extends BasicGameState {
         for (int i = 0; i < dmg; i++)
             healthList.remove(healthList.size() - 1);
         if (health <= 0) {
-
-            if (health <= 0) {
-
-                gameRunning = false;
-            }
-            invulTimer = 2000;
+            gameRunning = false;
         }
+        invulTimer = 2000;
     }
 
     public void updateBar ( float progress){
