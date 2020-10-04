@@ -13,7 +13,7 @@ import spaceapps2020.ui.Label;
 
 public class NavState extends EventBasedState {
     static int initial_y = 60;
-    static int initial_x = 1440;
+    static int initial_x = 1360;
     static int box_y = 130;
     static SpriteSheetFont pixelFontWhite;
 
@@ -29,7 +29,7 @@ public class NavState extends EventBasedState {
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        components.add(new ImageComponent(gameContainer, "assets/nav/selectBack.png", 1650, 530,500,1000));
+        components.add(new ImageComponent(gameContainer, "assets/nav/selectBack.png", 1600, 530,550,1000));
         Button backBtn = new Button(gameContainer, 150, 100, 225, 113, new Image("assets/nav/back.png")) {
             @Override
             public void onLeftClick() {
@@ -47,10 +47,10 @@ public class NavState extends EventBasedState {
         components.add(selectBtn1);
 
         pixelFontWhite = new SpriteSheetFont(new SpriteSheet(new Image("assets/fontwhite.png", false, Image.FILTER_NEAREST).getScaledCopy(4f), 20, 20), ' ');
-        addObjectLabel(gameContainer,"EXPLORER 7//1960-002D//DEBRIS//SMALL", 0);
-        addObjectLabel(gameContainer,"TELSTAR 2//1960-002D//DEBRIS//SMALL", 1);
-        addObjectLabel(gameContainer,"THOR ABLESTAR//1960-002D//DEBRIS//SMALL", 2);
-        addObjectLabel(gameContainer,"VANGUARD 1//1960-002D//DEBRIS//SMALL", 3);
+        addObjectLabel(gameContainer,"EXPLORER 7//1959-009A//PAYLOAD//MEDIUM", 0);
+        addObjectLabel(gameContainer,"TELSTAR 2//1960-002D//PAYLOAD//MEDIUM", 1);
+        addObjectLabel(gameContainer,"THOR ABLESTAR//1960-007C//ROCKET BODY//LARGE", 2);
+        addObjectLabel(gameContainer,"VANGUARD 1//1958-002B//PAYLOAD//SMALL", 3);
 
         planetImages[0] = new Image("assets/explorer7pixl.png", false, Image.FILTER_NEAREST);
         planetImages[1] = new Image("assets/telstar2pixl.png", false, Image.FILTER_NEAREST);
@@ -80,6 +80,7 @@ public class NavState extends EventBasedState {
             @Override
             public void onLeftClick() {
                 currentImageIndex = index;
+
             }
         });
         initial_y += 220;
